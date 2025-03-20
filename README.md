@@ -1,5 +1,5 @@
 <div align="center">
-<h1>XMLToLua</h1>
+<h1>LuaXML</h1>
 A simple, open-source XML to Lua file converter, made for my<br>
 Roblox text rendering module <a href="https://github.com/AlexanderLindholt/TextPlus">Text+</a>, and written in pure Lua.
 </div>
