@@ -11,7 +11,7 @@ Roblox text rendering module Text+, and written in pure Lua.
 
 
 GitHub:
-https://github.com/AlexanderLindholt/XMLToLua
+https://github.com/AlexanderLindholt/LuaXML
 
 
 --------------------------------------------------------------------------------
@@ -118,7 +118,7 @@ local function convert(xml)
             end)
             local key = string.format("[\"%s\"]", escaped)
 
-            table.insert(characters, key.." = {Vector2.new("..width..", "..height.."), Vector2.new("..x..", "..y.."), Vector2.new("..xOffset..", "..yOffset.."), xAdvance}")
+            table.insert(characters, key.." = {Vector2.new("..width..", "..height.."), Vector2.new("..x..", "..y.."), Vector2.new("..xOffset..", "..yOffset.."), "..xAdvance.."}")
         end
     end
 
