@@ -1,5 +1,6 @@
 # XMLToLua
-An XML to Lua file converter, made for my text rendering module 'Text+'. Written in Lua.
+An XML to Lua file converter, made for my text rendering module **Text+**.<br>
+*Written in Lua.*
 
 # Tutorial
 Download the latest zip file.<br>
