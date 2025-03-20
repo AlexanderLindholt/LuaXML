@@ -1,6 +1,11 @@
-# XMLToLua
-An XML to Lua file converter, made for my text rendering module [Text+](https://github.com/AlexanderLindholt/TextPlus).<br>
-*Written in Lua.*
+<div align="center">
+<h1>XMLToLua</h1>
+A simple, open-source XML to Lua file converter, made for my<br>
+Roblox text rendering module <a href="https://github.com/AlexanderLindholt/TextPlus">Text+</a>, and written in pure Lua.
+</div>
+<br>
+​<br>
+<br>
 
 # Tutorial
 Download the latest zip file.<br>
