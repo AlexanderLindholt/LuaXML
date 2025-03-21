@@ -115,7 +115,7 @@ local function convert(xml)
                 return "Character data is missing."
             end
 
-            -- Format data
+            -- Format and insert data.
             table.insert(characters
                 "[\""..string.char(id):gsub("[\\\"]", function(c)
                     return c == "\\" and "\\\\" or "\\\""
