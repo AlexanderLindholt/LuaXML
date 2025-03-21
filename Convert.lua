@@ -72,29 +72,28 @@ local function writeFile(path, content)
     if not file then return end
     local success = file:write(content)
     file:close()
-    if success ~= nil then
+    if success then
         return true
     end
 end
 
 -- XML to Lua conversion.
 local function extractInteger(element, attribute)
-    local integer = tonumber(element:match(attribute.."=\"(%d+)\""))
-    if integer then
-        return integer
-    else
-        return 0
-    end
+    return tonumber(element:match(attribute.."=\"(%d+)\""))
 end
 local function convert(xml)
     -- Normalize whitespace for multi-line element handling.
-    local xml = xml:gsub("%s+", " ")
-    local fontSize = 0
+    xml = xml:gsub("%s+", " ")
 
     -- Extract font size from info element.
-    local infoElement = xml:match("<info[^>]+>")
-    if infoElement then
-        fontSize = extractInteger(infoElement, "size")
+    local fontSize = nil
+    do
+        local infoElement = xml:match("<info[^>]+>")
+        if infoElement then
+            fontSize = extractInteger(infoElement, "size")
+        else
+            return "Missing info element."
+        end
     end
 
     -- Gather character information.
@@ -102,7 +101,8 @@ local function convert(xml)
     
     for element in xml:gmatch("<char[^>]+/>") do
         local id = extractInteger(element, "id")
-        if id > 0 then
+        if id then
+            -- Extract data.
             local width = extractInteger(element, "width")
             local height = extractInteger(element, "height")
             local x = extractInteger(element, "x")
@@ -110,21 +110,22 @@ local function convert(xml)
             local xOffset = extractInteger(element, "xoffset")
             local yOffset = extractInteger(element, "yoffset")
             local xAdvance = extractInteger(element, "xadvance")
+            -- Ensure no data is missing.
+            if not width or not height or not x or not y or not xOffset or not yOffset or not xAdvance then
+                return "Character data is missing."
+            end
 
-            -- Process character and escape special characters
-            local char_str = string.char(id)
-            local escaped = char_str:gsub("[\\\"]", function(c)
-                return c == "\\" and "\\\\" or "\\\""
-            end)
-            local key = string.format("[\"%s\"]", escaped)
-
-            table.insert(characters, key.." = {Vector2.new("..width..", "..height.."), Vector2.new("..x..", "..y.."), Vector2.new("..xOffset..", "..yOffset.."), "..xAdvance.."}")
+            -- Format data
+            table.insert(characters
+                "[\""..string.char(id):gsub("[\\\"]", function(c)
+                    return c == "\\" and "\\\\" or "\\\""
+                end).."\"]".." = {"..width..", "..height..", Vector2.new("..x..", "..y.."), "..xOffset..", "..yOffset..", "..xAdvance.."}"
+            ) -- ["A"] = {1, 2, Vector2.new(10, 20), 1, 2, 1}
         end
     end
 
     -- Build output structure.
     local output = "{\n\tSize = "..fontSize..",\n\tCharacters = {\n"
-    
     for index, entry in ipairs(characters) do
         if index == #characters then
             -- Ensure no comma at the last member in the table.
@@ -141,24 +142,28 @@ end
 -- Application.
 local inputFile = findSupportedFile()
 if not inputFile then
-    print("No supported files found.\n")
+    print("No supported files found.")
     io.read()
 end
 
 local xml = readFile(inputFile)
 if not xml then
-    print("Failed to read \""..inputFile.."\".\n")
+    print("Failed to read \""..inputFile.."\".")
     io.read()
 end
 
-local lua_table = convert(xml)
-if not lua_table then
-    print("Conversion failed.\n")
+local result = convert(xml)
+if type(result) ~= "table" then
+    if result then
+        print("Conversion failed: "..result)
+    else
+        print("Conversion failed.")
+    end
     io.read()
 end
 
-local output_file = inputFile:gsub("%.%w+$", "")..".lua"
-if not writeFile(output_file, lua_table) then
-    print("Failed to write \""..output_file.."\".\n")
+local outputFile = inputFile:gsub("%.%w+$", "")..".lua"
+if not writeFile(outputFile, result) then
+    print("Failed to write \""..outputFile.."\".")
     io.read()
 end
