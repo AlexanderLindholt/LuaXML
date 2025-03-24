@@ -6,7 +6,7 @@
  | |___| |_| | (_| |/ . \| |  | | |____ 
  |______\__,_|\__,_/_/ \_\_|  |_|______|
 
-v1.2.0
+v1.2.1
 
 A simple, open-source XML to Lua file converter, made for my
 Roblox text rendering module Text+, and written in pure Lua.
@@ -80,7 +80,7 @@ end
 
 -- XML to Lua conversion.
 local function extractInteger(element, attribute)
-    return tonumber(element:match(attribute.."=\"(%d+)\""))
+    return tonumber(element:match(attribute.."=\"(-?%d+)\""))
 end
 local function convert(xml)
     -- Normalize whitespace for multi-line element handling.
@@ -93,7 +93,7 @@ local function convert(xml)
         if infoElement then
             fontSize = extractInteger(infoElement, "size")
         else
-            return "Missing info element. Make sure the file is in \"BmFont XML\" format."
+            return "Missing info element. Make sure the file is in \"BMFont XML\" format."
         end
     end
 
@@ -114,7 +114,7 @@ local function convert(xml)
 
             -- Ensure no data is missing.
             if not width or not height or not x or not y or not xOffset or not yOffset or not xAdvance then
-                return "Character data is missing. Ensure the file is in \"BmFont XML\" format."
+                return "Character data is missing. Ensure the file is in \"BMFont XML\" format."
             end
 
             -- Format and insert data.
@@ -160,7 +160,7 @@ if not xml then
 end
 
 local result = convert(xml)
-if type(result) ~= "table" then
+if type(result) ~= "string" then
     if result then
         print("Conversion failed: "..result)
     else
