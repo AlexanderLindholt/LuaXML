@@ -6,6 +6,8 @@
  | |___| |_| | (_| |/ . \| |  | | |____ 
  |______\__,_|\__,_/_/ \_\_|  |_|______|
 
+v1.2.0
+
 A simple, open-source XML to Lua file converter, made for my
 Roblox text rendering module Text+, and written in pure Lua.
 
@@ -58,7 +60,6 @@ local function findSupportedFile()
             end
         end
     end
-    return nil
 end
 local function readFile(path)
     local file = io.open(path, "rb")
@@ -92,7 +93,7 @@ local function convert(xml)
         if infoElement then
             fontSize = extractInteger(infoElement, "size")
         else
-            return "Missing info element."
+            return "Missing info element. Make sure the file is in \"BmFont XML\" format."
         end
     end
 
@@ -110,20 +111,25 @@ local function convert(xml)
             local xOffset = extractInteger(element, "xoffset")
             local yOffset = extractInteger(element, "yoffset")
             local xAdvance = extractInteger(element, "xadvance")
+
             -- Ensure no data is missing.
             if not width or not height or not x or not y or not xOffset or not yOffset or not xAdvance then
-                return "Character data is missing."
+                return "Character data is missing. Ensure the file is in \"BmFont XML\" format."
             end
 
             -- Format and insert data.
-            table.insert(characters
+            table.insert(characters,
                 "[\""..string.char(id):gsub("[\\\"]", function(c)
-                    return c == "\\" and "\\\\" or "\\\""
+                    if c == "\\" then
+                        return "\\\\"
+                    else
+                        return "\\\""
+                    end
                 end).."\"]".." = {"..width..", "..height..", Vector2.new("..x..", "..y.."), "..xOffset..", "..yOffset..", "..xAdvance.."}"
             ) -- ["A"] = {1, 2, Vector2.new(10, 20), 1, 2, 1}
         end
     end
-
+    
     -- Build output structure.
     local output = "{\n\tSize = "..fontSize..",\n\tCharacters = {\n"
     for index, entry in ipairs(characters) do
@@ -134,15 +140,16 @@ local function convert(xml)
             output = output.."\t\t"..entry..",\n"
         end
     end
-    
     output = output.."\t}\n}"
+
+    -- Return final Lua table string.
     return output
 end
 
 -- Application.
 local inputFile = findSupportedFile()
 if not inputFile then
-    print("No supported files found.")
+    print("No accepted files found.\nAccepted files: XML, FNT, TXT.")
     io.read()
 end
 
@@ -164,6 +171,6 @@ end
 
 local outputFile = inputFile:gsub("%.%w+$", "")..".lua"
 if not writeFile(outputFile, result) then
-    print("Failed to write \""..outputFile.."\".")
+    print("Failed to write \""..outputFile.."\". Ensure the file location is not restricted, or run as administrator.")
     io.read()
 end
