@@ -159,13 +159,11 @@ code {
 }
 
 .status.error {
-    background-color: #f2dede;
-    color: var(--error-color);
-    border: 1px solid var(--error-color);
+    background-color: var(--error-color);
+    color: var(--text-color);
 }
 
 .status.success {
-    background-color: #dff0d8;
-    color: var(--success-color);
-    border: 1px solid var(--success-color);
+    background-color: var(--success-color);
+    color: var(--text-color);
 }
