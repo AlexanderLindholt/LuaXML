@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('xmlFile');
-    const fileInfo = document.getElementById('fileInfo');
     const outputArea = document.getElementById('outputArea');
     const outputCodeElement = document.getElementById('outputCode');
     const copyButton = document.getElementById('copyButton');
@@ -34,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.onload = function(e) {
             try {
                 const xmlContent = e.target.result;
-                const luaCode = convertXmlToLua(xmlContent);
+                const luaCode = convertXMLToLua(xmlContent);
 
                 if (luaCode.startsWith('Error:')) {
                     showStatus(luaCode, 'error');
@@ -62,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsText(file);
     }
 
-    function convertXmlToLua(xml) {
+    function convertXMLToLua(xml) {
         xml = xml.replace(/\s+/g, ' ').trim();
 
         const extractInteger = (elementString, attribute) => {
@@ -102,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const xAdvance = extractInteger(attributes, 'xadvance');
 
                 if ([width, height, x, y, xOffset, yOffset, xAdvance].some(val => val === null || isNaN(val))) {
-                    return `Error: Character data (id=${id}) is missing or invalid. Ensure attributes (width, height, x, y, xoffset, yoffset, xadvance) are present and are integers.`;
+                    return `Error: Character data for ${id} is missing or invalid. Ensure attributes (width, height, x, y, xoffset, yoffset, xadvance) are present and are integers.`;
                 }
 
                 const char = String.fromCharCode(id);
@@ -112,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `\t\t["${escapedChar}"] = {${width}, ${height}, Vector2.new(${x}, ${y}), ${xOffset}, ${yOffset}, ${xAdvance}}`
                 );
             } else {
-                 console.warn("Found <char> tag with missing or invalid 'id' attribute:", match[0]);
+                 return `Found <char> tag with missing or invalid 'id' attribute:\n${match[0}}`;
             }
         }
 
@@ -124,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  return "Error: Expected <chars count='...'> element, but it was not found or invalid.";
              }
          } else if (characters.length === 0 && !xml.includes('<chars')) {
-             console.warn("No <char../> elements found and no <chars count='...'> tag detected.");
+             return "No <char../> elements found and no <chars count='...'> tag detected.";
          }
 
 
@@ -151,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(err => {
                 console.error('Failed to copy text: ', err);
-                showStatus('Error: Could not copy text to clipboard.', 'error');
+                showStatus('Error: Failed to copy text to clipboard.', 'error');
             });
     }
 
@@ -172,14 +171,4 @@ document.addEventListener('DOMContentLoaded', () => {
         statusElement.style.display = 'none';
         statusElement.className = 'status';
     }
-
-    function formatBytes(bytes, decimals = 2) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const dm = decimals < 0 ? 0 : decimals;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-    }
-
 });
