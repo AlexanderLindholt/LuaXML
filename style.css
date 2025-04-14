@@ -1,7 +1,7 @@
 :root {
     --background-color: #001a1f;
     --primary-color: #00ff6f;
-    --secondary-color: #001519;
+    --secondary-color: #001013;
     --text-color: #fff;
     --link-color: #4493f8;
     --border-color: #fff;
@@ -49,10 +49,8 @@ body {
 .container {
     background: none;
     padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 700px;
+    max-width: 400px;
 }
 
 h1 {
@@ -74,7 +72,7 @@ p {
     border: 1px dashed var(--border-color);
     border-radius: 5px;
     text-align: center;
-    background-color: var(--background-color);
+    background-color: var(--secondary-color);
 }
 
 .input-area label {
