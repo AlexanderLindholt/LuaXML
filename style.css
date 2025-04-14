@@ -3,6 +3,7 @@
     --primary-color: #00ff6f;
     --secondary-color: #001519;
     --text-color: #fff;
+    --link-color: #4493f8;
     --border-color: #fff;
     --error-color: #ff6b6b;
     --success-color: #81c784;
@@ -53,7 +54,7 @@ body {
     width: 100%;
     max-width: 700px;
 }
-t
+
 h1 {
     color: var(--primary-color);
     margin-bottom: 10px;
