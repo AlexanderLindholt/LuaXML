@@ -9,7 +9,7 @@
 v1.2.1
 
 A simple, open-source XML to Lua file converter, made for my
-Roblox text rendering module Text+, and written in pure Lua.
+Roblox text rendering module Text+, as web and executable.
 
 
 GitHub:
@@ -46,131 +46,131 @@ local lfs = require("lfs")
 
 -- File functions.
 local function findSupportedFile()
-    for filename in lfs.dir(".") do
-        if filename ~= "." and filename ~= ".." then
-            local attribute = lfs.attributes(filename)
-            if attribute and attribute.mode == "file" then
-                local extension = filename:match("^.+(%..+)$")
-                if extension then
-                    extension = extension:lower()
-                    if extension == ".fnt" or extension == ".txt" or extension == ".xml" then
-                        return filename
-                    end
-                end
-            end
-        end
-    end
+	for filename in lfs.dir(".") do
+		if filename ~= "." and filename ~= ".." then
+			local attribute = lfs.attributes(filename)
+			if attribute and attribute.mode == "file" then
+				local extension = filename:match("^.+(%..+)$")
+				if extension then
+					extension = extension:lower()
+					if extension == ".fnt" or extension == ".txt" or extension == ".xml" then
+						return filename
+					end
+				end
+			end
+		end
+	end
 end
 local function readFile(path)
-    local file = io.open(path, "rb")
-    if not file then return end
-    local content = file:read("*a")
-    file:close()
-    return content
+	local file = io.open(path, "rb")
+	if not file then return end
+	local content = file:read("*a")
+	file:close()
+	return content
 end
 local function writeFile(path, content)
-    local file = io.open(path, "wb")
-    if not file then return end
-    local success = file:write(content)
-    file:close()
-    if success then
-        return true
-    end
+	local file = io.open(path, "wb")
+	if not file then return end
+	local success = file:write(content)
+	file:close()
+	if success then
+		return true
+	end
 end
 
 -- XML to Lua conversion.
 local function extractInteger(element, attribute)
-    return tonumber(element:match(attribute.."=\"(-?%d+)\""))
+	return tonumber(element:match(attribute.."=\"(-?%d+)\""))
 end
 local function convert(xml)
-    -- Normalize whitespace for multi-line element handling.
-    xml = xml:gsub("%s+", " ")
+	-- Normalize whitespace for multi-line element handling.
+	xml = xml:gsub("%s+", " ")
 
-    -- Extract font size from info element.
-    local fontSize = nil
-    do
-        local infoElement = xml:match("<info[^>]+>")
-        if infoElement then
-            fontSize = extractInteger(infoElement, "size")
-        else
-            return "Missing info element. Make sure the file is in \"BMFont XML\" format."
-        end
-    end
+	-- Extract font size from info element.
+	local fontSize = nil
+	do
+		local infoElement = xml:match("<info[^>]+>")
+		if infoElement then
+			fontSize = extractInteger(infoElement, "size")
+		else
+			return "Missing info element. Make sure the file is in \"BMFont XML\" format."
+		end
+	end
 
-    -- Gather character information.
-    local characters = {}
-    
-    for element in xml:gmatch("<char[^>]+/>") do
-        local id = extractInteger(element, "id")
-        if id then
-            -- Extract data.
-            local width = extractInteger(element, "width")
-            local height = extractInteger(element, "height")
-            local x = extractInteger(element, "x")
-            local y = extractInteger(element, "y")
-            local xOffset = extractInteger(element, "xoffset")
-            local yOffset = extractInteger(element, "yoffset")
-            local xAdvance = extractInteger(element, "xadvance")
+	-- Gather character information.
+	local characters = {}
+	
+	for element in xml:gmatch("<char[^>]+/>") do
+		local id = extractInteger(element, "id")
+		if id then
+			-- Extract data.
+			local width = extractInteger(element, "width")
+			local height = extractInteger(element, "height")
+			local x = extractInteger(element, "x")
+			local y = extractInteger(element, "y")
+			local xOffset = extractInteger(element, "xoffset")
+			local yOffset = extractInteger(element, "yoffset")
+			local xAdvance = extractInteger(element, "xadvance")
 
-            -- Ensure no data is missing.
-            if not width or not height or not x or not y or not xOffset or not yOffset or not xAdvance then
-                return "Character data is missing. Ensure the file is in \"BMFont XML\" format."
-            end
+			-- Ensure no data is missing.
+			if not width or not height or not x or not y or not xOffset or not yOffset or not xAdvance then
+				return "Character data is missing. Ensure the file is in \"BMFont XML\" format."
+			end
 
-            -- Format and insert data.
-            table.insert(characters,
-                "[\""..string.char(id):gsub("[\\\"]", function(c)
-                    if c == "\\" then
-                        return "\\\\"
-                    else
-                        return "\\\""
-                    end
-                end).."\"]".." = {"..width..", "..height..", Vector2.new("..x..", "..y.."), "..xOffset..", "..yOffset..", "..xAdvance.."}"
-            ) -- ["A"] = {1, 2, Vector2.new(10, 20), 1, 2, 1}
-        end
-    end
-    
-    -- Build output structure.
-    local output = "{\n\tSize = "..fontSize..",\n\tCharacters = {\n"
-    for index, entry in ipairs(characters) do
-        if index == #characters then
-            -- Ensure no comma at the last member in the table.
-            output = output.."\t\t"..entry.."\n"
-        else
-            output = output.."\t\t"..entry..",\n"
-        end
-    end
-    output = output.."\t}\n}"
+			-- Format and insert data.
+			table.insert(characters,
+				"[\""..string.char(id):gsub("[\\\"]", function(c)
+					if c == "\\" then
+						return "\\\\"
+					else
+						return "\\\""
+					end
+				end).."\"]".." = {"..width..", "..height..", Vector2.new("..x..", "..y.."), "..xOffset..", "..yOffset..", "..xAdvance.."}"
+			) -- ["A"] = {1, 2, Vector2.new(10, 20), 1, 2, 1}
+		end
+	end
+	
+	-- Build output structure.
+	local output = "{\n\tSize = "..fontSize..",\n\tCharacters = {\n"
+	for index, entry in ipairs(characters) do
+		if index == #characters then
+			-- Ensure no comma at the last member in the table.
+			output = output.."\t\t"..entry.."\n"
+		else
+			output = output.."\t\t"..entry..",\n"
+		end
+	end
+	output = output.."\t}\n}"
 
-    -- Return final Lua table string.
-    return output
+	-- Return final Lua table string.
+	return output
 end
 
 -- Application.
 local inputFile = findSupportedFile()
 if not inputFile then
-    print("No accepted files found.\nAccepted files: XML, FNT, TXT.")
-    io.read()
+	print("No accepted files found.\nAccepted files: XML, FNT, TXT.")
+	io.read()
 end
 
 local xml = readFile(inputFile)
 if not xml then
-    print("Failed to read \""..inputFile.."\".")
-    io.read()
+	print("Failed to read \""..inputFile.."\".")
+	io.read()
 end
 
 local result = convert(xml)
 if type(result) ~= "string" then
-    if result then
-        print("Conversion failed: "..result)
-    else
-        print("Conversion failed.")
-    end
-    io.read()
+	if result then
+		print("Conversion failed: "..result)
+	else
+		print("Conversion failed.")
+	end
+	io.read()
 end
 
 local outputFile = inputFile:gsub("%.%w+$", "")..".lua"
 if not writeFile(outputFile, result) then
-    print("Failed to write \""..outputFile.."\". Ensure the file location is not restricted, or run as administrator.")
-    io.read()
+	print("Failed to write \""..outputFile.."\". Ensure the file location is not restricted, or run as administrator.")
+	io.read()
 end

@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuaXML</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LuaXML</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700&display=swap">
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>LuaXML</h1>
-        <p>Convert BMFont XML files to a Lua table format compatible with text rendering module <a href="https://devforum.roblox.com/t/3521684">Text+</a>.</p>
+	<div class="container">
+		<h1>LuaXML</h1>
+		
+		<p>Convert BMFont XML files to a Lua table format compatible with text rendering module <a target="_blank" href="https://devforum.roblox.com/t/3521684">Text+</a>.</p>
+		
+		<div class="inputArea">
+			<label>Select BMFont XML file:</label>
+			<div class="fileInput">
+				<span class="fileName" id="xmlFileName">No file selected.</span>
+				<label class="fileButton">
+					Browse files
+					<input type="file" id="xmlFile" accept=".xml,.fnt,.txt">
+				</label>
+			</div>
+		</div>
+		
+		<p class="status" id="status"></p>
+		
+		<div class="outputArea" id="outputArea">
+			<h2>Lua table:</h2>
+			<div class="codeContainer">
+				<code id="outputCode"></code>
+				<button id="copyButton" title="Copy to clipboard">
+					<svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+					<span>Copy</span>
+				</button>
+			</div>
+		</div>
+	</div>
 
-        <div class="input-area">
-            <label for="xmlFile">Select BMFont XML file:</label>
-            <input type="file" id="xmlFile" accept=".xml,.fnt,.txt">
-        </div>
-
-        <div class="output-area" id="outputArea" style="display: none;">
-            <h2>Lua table:</h2>
-            <div class="code-container">
-                <pre><code id="outputCode"></code></pre>
-                <button id="copyButton" title="Copy to clipboard">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 24 24" width="16" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-                    <span>Copy</span>
-                </button>
-            </div>
-        </div>
-
-        <p class="status" id="status"></p>
-    </div>
-
-    <script src="script.js"></script>
+	<script src="script.js"></script>
 </body>
 </html>
