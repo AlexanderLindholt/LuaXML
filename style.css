@@ -173,9 +173,7 @@ code {
 }
 .status.error {
 	background-color: var(--error-color);
-	color: var(--text-color);
 }
 .status.success {
 	background-color: var(--success-color);
-	color: var(--text-color);
 }
