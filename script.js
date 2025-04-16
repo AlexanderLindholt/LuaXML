@@ -10,16 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
 	copyButton.addEventListener("click", copyToClipboard)
 	
 	function handleFileSelect(event) {
-		const file = event.target.files[0]
 		clearStatus()
 		outputArea.style.display = "none"
 		
+		const file = event.target.files[0]
+		if (!file) return
+		
 		fileNameElement.textContent = file.name
 		fileNameElement.title = file.name
-		
-		if (!file) {
-			return
-		}
+		fileNameElement.style = "color: var(--text-color);"
 		
 		const allowedExtensions = /(\.xml|\.fnt|\.txt)$/i
 		if (!allowedExtensions.exec(file.name)) {
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				return "Missing or invalid 'size' attribute in <info> element."
 			}
 		} else {
-			return "Missing <info> element. Ensure BMFont XML format."
+			return "Missing <info> element."
 		}
 		
 		const characters = []
@@ -143,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				buttonText.textContent = "Copied!"
 				copyButton.disabled = true
 				setTimeout(() => {
-				   buttonText.textContent = originalText
+					buttonText.textContent = originalText
 					copyButton.disabled = false
 				}, 1500)
 			})
@@ -159,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		copyButton.disabled = false
 	}
 	
-	function showStatus(message, type = "info") {
+	function showStatus(message, type) {
 		statusElement.textContent = message
 		statusElement.className = `status ${type}`
 		statusElement.style.display = "block"

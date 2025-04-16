@@ -99,6 +99,10 @@ p {
 }
 .fileName {
 	padding: 8px 16px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: rgba(255, 255, 255, 0.7)
 }
 .fileButton {
 	background: var(--secondary-color);
