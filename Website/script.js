@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const fileInput = document.getElementById("xmlFile")
 	const fileNameElement = document.getElementById("xmlFileName")
+	
 	const outputArea = document.getElementById("outputArea")
 	const outputCodeElement = document.getElementById("outputCode")
 	const copyButton = document.getElementById("copyButton")
+	
 	const statusElement = document.getElementById("status")
 	
 	fileInput.addEventListener("change", handleFileSelect)
