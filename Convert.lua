@@ -6,7 +6,7 @@
  | |___| |_| | (_| |/ . \| |  | | |____ 
  |______\__,_|\__,_/_/ \_\_|  |_|______|
 
-v1.2.1 (executable)
+v1.2.1 (executable version)
 
 A simple, open-source XML to Lua file converter, made for my
 Roblox text rendering module Text+, as web and executable.
