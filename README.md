@@ -1,7 +1,7 @@
 <div align="center">
 <h1>LuaXML</h1>
 A simple, open-source XML to Lua file converter, made for my<br>
-Roblox text rendering module <a target="_blank" href="https://github.com/AlexanderLindholt/TextPlus">Text+</a>, as web and executable.
+Roblox text-rendering library <a target="_blank" href="https://github.com/AlexanderLindholt/TextPlus">Text+</a>, as web and executable.
 </div>
 <br>
 ​<br>
