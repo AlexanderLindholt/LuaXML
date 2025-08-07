@@ -1,7 +1,7 @@
 :root {
 	--background-color: #161616;
 	--primary-color: #4493f8;
-	--secondary-color: #1b1c1d;
+	--secondary-color: #1b1c1e;
 	--text-color: #fff;
 	--link-color: #4493f8;
 	--border-color: #fff;
@@ -37,7 +37,8 @@ a:active {
 }
 
 body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-family: "Inter";
+	font-weight: 500;
 	color: var(--text-color);
 	background-color: var(--background-color);
 	padding: 20px;
@@ -181,7 +182,8 @@ code {
 	padding: 16px;
 	border-radius: 18px;
 	text-align: center;
-	font-weight: 500;
+	font-size: 18px;
+	font-weight: 700;
 }
 .status.error {
 	background-color: var(--error-color);
