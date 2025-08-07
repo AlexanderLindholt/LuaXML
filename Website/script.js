@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				
 				if (output.startsWith("{")) {
 					outputCodeElement.textContent = output
+					hljs.highlightAll()
 					outputArea.style.display = "flex"
 					showStatus("Conversion successful!", "success")
 					resetCopyButton()
